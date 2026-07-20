@@ -9,16 +9,56 @@ import Foundation
 import SwiftData
 
 protocol TaskStoring {
-    func loadTasks() -> [Task]
-    func saveTask(_ task: Task)
-    func deleteTask(id: UUID)
-    func updateTask(_ task: Task)
+    func loadTasks() throws -> [Task]
+    func saveTask(_ task: Task) throws
+    func deleteTask(id: UUID) throws
+    func saveChanges() throws
 }
 
 final class TaskStore: TaskStoring {
-    internal init(modelContext: ModelContext) {
+    init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
     private let modelContext: ModelContext
-}
+    
+    func saveTask(_ task: Task) throws {
+        modelContext.insert(task)
+        try saveChanges()
+    }
+    
+    func loadTasks() throws -> [Task] {
+        let descriptor = FetchDescriptor<Task>()
+        let tasks = try modelContext.fetch(descriptor)
+        return tasks
+    }
+    
+    func deleteTask(id: UUID) throws {
+        guard let task = try findTask(id: id) else {
+            throw TaskStoreError.taskNotFound
+        }
+        modelContext.delete(task)
+        try saveChanges()
+    }
+    
+        func saveChanges() throws {
+            try modelContext.save()
+        }
+        
+        private func findTask(id: UUID) throws -> Task? {
+            let descriptor = FetchDescriptor<Task>(
+                predicate: #Predicate { task in
+                    task.id == id
+                }
+            )
+            let tasks = try modelContext.fetch(descriptor)
+            return tasks.first
+        }
+        
+    }
+
+    enum TaskStoreError: Error {
+        case taskNotFound
+    }
+
+

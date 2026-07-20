@@ -12,7 +12,6 @@ protocol TaskServicing {
     func addTask(_ task: Task)
     func updateTask(_ task: Task)
     func deleteTask(id: UUID)
-//    func toggleCompleted(id: UUID)
 }
 
 final class TaskService: TaskServicing {

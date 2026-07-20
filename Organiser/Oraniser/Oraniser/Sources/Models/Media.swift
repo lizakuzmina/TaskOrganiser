@@ -6,8 +6,16 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Media {
+@Model
+final class Media {
+    init(id: UUID, url: URL, type: MediaType) {
+        self.id = id
+        self.url = url
+        self.type = type
+    }
+    
     var id: UUID
     var url: URL
     var type: MediaType

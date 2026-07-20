@@ -6,8 +6,24 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Task {
+@Model
+final class Task {
+    init(id: UUID, title: String, shortDescription: String? = nil, phoneNumber: String? = nil, dueDate: Date? = nil, isUrgency: Bool? = nil, isCompleted: Bool, repeatRule: RepeatRule? = nil, subTasks: [SubTask], media: [Media], location: Location? = nil) {
+        self.id = id
+        self.title = title
+        self.shortDescription = shortDescription
+        self.phoneNumber = phoneNumber
+        self.dueDate = dueDate
+        self.isUrgency = isUrgency
+        self.isCompleted = isCompleted
+        self.repeatRule = repeatRule
+        self.subTasks = subTasks
+        self.media = media
+        self.location = location
+    }
+    
     
     var id: UUID
     var title: String
