@@ -6,8 +6,16 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Location {
+@Model
+final class Location {
+    init(title: String, latitude: Double, longitude: Double) {
+        self.title = title
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+    
     var title: String
     var latitude: Double
     var longitude: Double

@@ -6,8 +6,15 @@
 //
 
 import Foundation
+import SwiftData
 
-struct SubTask {
+@Model
+final class SubTask {
+    init(text: String, isDone: Bool) {
+        self.text = text
+        self.isDone = isDone
+    }
+    
     var text: String
     var isDone: Bool
 }
