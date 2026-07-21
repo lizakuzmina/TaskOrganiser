@@ -13,6 +13,7 @@ protocol TaskStoring {
     func saveTask(_ task: Task) throws
     func deleteTask(id: UUID) throws
     func saveChanges() throws
+    func markCompleted(id: UUID) throws
 }
 
 final class TaskStore: TaskStoring {
@@ -54,6 +55,14 @@ final class TaskStore: TaskStoring {
             let tasks = try modelContext.fetch(descriptor)
             return tasks.first
         }
+    
+    func markCompleted(id: UUID) throws {
+        guard let task = try findTask(id: id) else {
+            throw TaskStoreError.taskNotFound
+        }
+        task.isCompleted = true
+        try saveChanges()
+    }
         
     }
 
