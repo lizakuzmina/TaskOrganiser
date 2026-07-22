@@ -11,3 +11,4 @@ let backgroundColor = Color("BackgroundColor")
 let accentColor = Color("AccentColor")
 let secondaryColor = Color("SecondaryColor")
 
+let colorOfIconsTask = Color("ColorIconsTask")

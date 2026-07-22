@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Task {
-    init(id: UUID, title: String, shortDescription: String? = nil, phoneNumber: String? = nil, dueDate: Date? = nil, isUrgency: Bool? = nil, isCompleted: Bool, repeatRule: RepeatRule? = nil, subTasks: [SubTask], media: [Media], location: Location? = nil) {
+    init(id: UUID, title: String, shortDescription: String? = nil, phoneNumber: String? = nil, dueDate: Date? = nil, isUrgency: Bool = false, isCompleted: Bool, repeatRule: RepeatRule? = nil, subTasks: [SubTask], media: [Media], location: Location? = nil) {
         self.id = id
         self.title = title
         self.shortDescription = shortDescription
@@ -23,6 +23,7 @@ final class Task {
         self.media = media
         self.location = location
     }
+   
     
     
     var id: UUID
@@ -32,7 +33,7 @@ final class Task {
     
     var dueDate: Date?
     
-    var isUrgency: Bool?
+    var isUrgency: Bool = false
     var isCompleted: Bool
     
     var repeatRule: RepeatRule?
@@ -42,6 +43,9 @@ final class Task {
     
 }
 
-enum RepeatRule {
-    
+enum RepeatRule: String, Codable {
+    case daily
+    case weekly
+    case monthly
+    case yearly
 }
