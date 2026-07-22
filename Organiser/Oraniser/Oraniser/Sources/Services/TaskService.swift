@@ -8,10 +8,11 @@
 import Foundation
 
 protocol TaskServicing {
-    func loadTasks() -> [Task]
-    func addTask(_ task: Task)
-    func updateTask(_ task: Task)
-    func deleteTask(id: UUID)
+    func loadTasks() throws -> [Task]
+    func addTask(_ task: Task) throws
+    func updateTask() throws
+    func deleteTask(id: UUID) throws
+    func markCompleted(id: UUID) throws
 }
 
 final class TaskService: TaskServicing {
@@ -21,16 +22,19 @@ final class TaskService: TaskServicing {
     
     private let store: TaskStoring
     
-    func loadTasks() -> [Task] {
-        store.loadTasks()
+    func loadTasks() throws -> [Task] {
+        try store.loadTasks()
     }
-    func addTask(_ task: Task) {
-        store.saveTask(task)
+    func addTask(_ task: Task) throws {
+        try store.saveTask(task)
     }
-    func updateTask(_ task: Task) {
-        store.updateTask(task)
+    func updateTask() throws {
+        try store.saveChanges()
     }
-    func deleteTask(id: UUID) {
-        store.deleteTask(id: id)
+    func deleteTask(id: UUID) throws {
+        try store.deleteTask(id: id)
+    }
+    func markCompleted(id: UUID) throws {
+        try store.markCompleted(id: id)
     }
 }

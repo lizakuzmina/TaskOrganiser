@@ -21,7 +21,7 @@ final class Media {
     var type: MediaType
 }
 
-enum MediaType {
+enum MediaType: String, Codable {
     case image
     case video
     case document
