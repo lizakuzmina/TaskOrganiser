@@ -29,7 +29,11 @@ final class TaskStore: TaskStoring {
     }
     
     func loadTasks() throws -> [Task] {
-        let descriptor = FetchDescriptor<Task>()
+        let descriptor = FetchDescriptor<Task>(
+            sortBy: [
+                SortDescriptor(\.createdAt, order: .reverse)
+            ]
+        )
         let tasks = try modelContext.fetch(descriptor)
         return tasks
     }

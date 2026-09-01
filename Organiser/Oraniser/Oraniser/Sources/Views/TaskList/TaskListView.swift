@@ -53,7 +53,7 @@ struct TaskListView: View {
             }
         }
         .sheet(isPresented: $showAddTask) {
-            AddTaskView()
+            AddTaskView(viewModel: viewModel)
         }
         
     }
