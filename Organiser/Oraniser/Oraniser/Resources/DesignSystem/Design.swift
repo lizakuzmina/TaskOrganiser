@@ -7,8 +7,17 @@
 
 import SwiftUI
 
-let backgroundColor = Color("BackgroundColor")
-let accentColor = Color("AccentColor")
-let secondaryColor = Color("SecondaryColor")
+let appBackgroundColor = Color("BackgroundColor")
+let appAccentColor = Color("AccentColor")
+let appSecondaryColor = Color("SecondaryColor")
 
-let colorOfIconsTask = Color("ColorIconsTask")
+let appColorOfIconsTask = Color("ColorIconsTask")
+
+let appBackgroundGradient = LinearGradient(
+    stops: [
+        .init(color: Color("BackgroundTop"), location: 0.36),
+        .init(color: Color("BackgroundBottom"), location: 1.0)
+    ],
+    startPoint: .top,
+    endPoint: .bottom
+)

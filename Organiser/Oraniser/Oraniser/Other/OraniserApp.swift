@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct OraniserApp: App {
+    
+    let coordinator = Coordinator()
+    
     var body: some Scene {
         WindowGroup {
-            TaskListView()
+            coordinator.taskListView
         }
     }
 }
