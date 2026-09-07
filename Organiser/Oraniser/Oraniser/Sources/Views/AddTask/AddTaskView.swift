@@ -12,12 +12,40 @@ struct AddTaskView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: TaskViewModel
     @State private var title = ""
+    @FocusState private var isTitleFocused: Bool
+    @State private var description = ""
     @State private var showDiscardAlert = false
+    
+    @State private var isReminderEnabled = false
     
     var body: some View {
         NavigationStack {
-            VStack {
-                TextField("Назва задачі", text: $title)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    
+                    TaskOptionGroup {
+                        TextField("Назва задачі", text: $title, axis: .vertical)
+                            .focused($isTitleFocused)
+                            .font(.title3.bold())
+                            .padding()
+                        Divider()
+                        TextField("Опис", text: $description, axis: .vertical)
+                            .foregroundStyle(.secondary)
+                            .padding()
+                    }
+                    
+                    VoiceMessageCell()
+                    DateTimeOptionsView()
+                    ResourceOptionsView()
+                    AdditionalOptionsView()
+                }
+                .padding(.top, 4)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .background(appBackgroundColorAddTask)
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                isTitleFocused = true
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -31,12 +59,12 @@ struct AddTaskView: View {
                         Image(systemName: "xmark")
                     }
                 }
-
+                
                 ToolbarItem(placement: .principal) {
                     Text("Нова задача")
                         .font(.headline)
                 }
-
+                
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         let task = Task(id: UUID(), title: title, isCompleted: false, subTasks: [], media: [])
@@ -45,18 +73,17 @@ struct AddTaskView: View {
                     }
                     label: {
                         Image(systemName: "checkmark")
+                            .foregroundStyle(title.isEmpty ? .secondary : appBackgroundColor)
                     }
+                    .buttonStyle(.glassProminent)
+                    .tint(title.isEmpty ? .white : appAccentColor)
                     .disabled(title.isEmpty)
-                    .glassCircle(size: 36, tint: title.isEmpty ? nil : appAccentColor)
                 }
             }
-        }.alert("Ви дійсно бажаєте закрити? Задача буде не збережена.", isPresented: $showDiscardAlert) {
+        }
+        .alert("Ви дійсно бажаєте закрити? Задача буде не збережена.", isPresented: $showDiscardAlert) {
             Button("Залишитись") {}
             Button("Вийти") { dismiss() }
         }
     }
 }
-
-//#Preview {
-//    AddTaskView()
-//}

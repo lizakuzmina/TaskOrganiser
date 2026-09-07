@@ -20,7 +20,7 @@ struct VoiceMessageButton: View {
         .padding(.vertical, 8)
         .background(
             Capsule()
-                .fill(Color.accent)
+                .fill(Color.backgroundBottom)
         )
     }
 }

@@ -20,6 +20,7 @@ struct TaskCardView: View {
             }
         } .padding()
             .glassCard()
+            .padding(.horizontal)
     }
 }
 

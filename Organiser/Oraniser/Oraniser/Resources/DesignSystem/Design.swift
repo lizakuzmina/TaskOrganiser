@@ -10,6 +10,7 @@ import SwiftUI
 let appBackgroundColor = Color("BackgroundColor")
 let appAccentColor = Color("AccentColor")
 let appSecondaryColor = Color("SecondaryColor")
+let appBackgroundColorAddTask = Color("BackgroundAddTask")
 
 let appColorOfIconsTask = Color("ColorIconsTask")
 
