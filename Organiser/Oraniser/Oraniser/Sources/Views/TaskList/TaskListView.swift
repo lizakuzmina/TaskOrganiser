@@ -11,6 +11,7 @@ struct TaskListView: View {
     
     @ObservedObject var viewModel: TaskViewModel
     @State var showAddTask: Bool = false
+    @Binding var showRepeatingTasks: Bool
     
     var body: some View {
         NavigationStack {
@@ -19,14 +20,14 @@ struct TaskListView: View {
                     .ignoresSafeArea()
                 ScrollView {
                     LazyVStack {
-                        ForEach(viewModel.tasks) { task in
+                        ForEach(viewModel.tasks.filter { $0.repeatRule == nil } ) { task in
                             TaskCardView(task: task)
                         }
                     }
                     .onAppear {
                         viewModel.loadTasks()
                     }
-                }
+                }.navigationBarTitleDisplayMode(.inline)
 
                 AddTaskButton(showAddTask: $showAddTask)
                     .padding()
@@ -40,8 +41,23 @@ struct TaskListView: View {
                 }
 
                 ToolbarItem(placement: .principal) {
-                    Text("Мої задачі")
-                        .font(.headline)
+                    Menu {
+                        Button("Мої задачі") {
+                            showRepeatingTasks = false
+                        }
+
+                        Button("Повторювані") {
+                            showRepeatingTasks = true
+                        }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text(showRepeatingTasks ? "Повторювані задачі" : "Мої задачі")
+                                .font(.headline)
+
+                            Image(systemName: "chevron.down")
+                                .font(.caption)
+                        }
+                    }
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -53,14 +69,11 @@ struct TaskListView: View {
             }
         }
         .sheet(isPresented: $showAddTask) {
-            AddTaskView(viewModel: viewModel)
+            AddTaskView(
+                viewModel: viewModel,
+                showRepeatingTasks: $showRepeatingTasks
+            )
         }
         
     }
-}
-
-#Preview {
-    @Previewable @State var showAddTask = false
-    
-    AddTaskButton(showAddTask: $showAddTask)
 }

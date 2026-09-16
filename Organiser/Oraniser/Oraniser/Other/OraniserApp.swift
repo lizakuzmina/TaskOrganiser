@@ -14,7 +14,7 @@ struct OraniserApp: App {
     
     var body: some Scene {
         WindowGroup {
-            coordinator.taskListView
+            coordinator.taskListContainerView
         }
     }
 }

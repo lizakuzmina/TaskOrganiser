@@ -10,38 +10,56 @@ import SwiftUI
 struct TaskCardView: View {
     let task: Task
     var body: some View {
-        VStack (alignment: .leading, spacing: 10) {
-            TaskHeaderView(title: task.title, description: task.shortDescription)
-            TaskIconsView(phone: task.phoneNumber, location: task.location, filesCount: task.media.count, subtasksCount: task.subTasks.count)
+        VStack(alignment: .leading, spacing: 10) {
+            TaskHeaderView(
+                title: task.title,
+                description: task.shortDescription
+            )
+
+            TaskIconsView(
+                phone: task.phoneNumber,
+                location: task.location,
+                filesCount: task.media.count,
+                subtasksCount: task.subTasks.count
+            )
+
             HStack {
+                
+                HStack(spacing: 5)  {
+                    if let repeatRule = task.repeatRule {
+                        Image(systemName: "repeat")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                                Text("\(repeatRule.title),")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                }
+                
                 DueDateView(dueDate: task.dueDate)
+
                 Spacer()
+
                 VoiceMessageButton()
             }
-        } .padding()
-            .glassCard()
-            .padding(.horizontal)
+        }
+        .padding()
+        .glassCard()
+        .overlay {
+            if task.isUrgency {
+                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                    .stroke(appAccentColor, lineWidth: 1)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if task.isUrgency {
+                Image(systemName: "bell.and.waves.left.and.right")
+                    .font(.system(size: 20))
+                    .foregroundStyle(appAccentColor)
+                    .rotationEffect(.degrees(25))
+                    .padding(20)
+            }
+        }
+        .padding(.horizontal)
     }
-}
-
-#Preview {
-
-    TaskCardView(
-        task: Task(
-            id: UUID(),
-            title: "Buy groceries",
-            shortDescription: "Milk, eggs, vegetables and coffee",
-            phoneNumber: "+380991234567",
-            dueDate: .now,
-            isUrgency: true,
-            isCompleted: false,
-            repeatRule: nil,
-            subTasks: [],
-            media: [],
-            location: nil
-        )
-    )
-    .padding()
-    .background(Color.gray.opacity(0.15))
-
 }

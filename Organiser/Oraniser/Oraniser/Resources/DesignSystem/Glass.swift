@@ -36,11 +36,22 @@ struct GlassCardModifier: ViewModifier {
 
         if #available(iOS 26, *) {
 
+            // ВАЖЛИВО: glassEffect застосований до окремої декоративної
+            // форми у .background, а НЕ до самого content.
+            // Якщо застосувати glassEffect напряму до content (як було раніше),
+            // SwiftUI обгортає весь вміст у власний рендер-шар Liquid Glass,
+            // через що Menu/Picker всередині втрачають прив'язку (anchor)
+            // до свого положення на екрані і показуються по центру,
+            // а не спливаючим попапом біля кнопки.
             content
-                .glassEffect(
-                    .regular,
-                    in: shape
-                )
+                .background {
+                    shape
+                        .fill(.clear)
+                        .glassEffect(
+                            .regular,
+                            in: shape
+                        )
+                }
 
         } else {
 

@@ -11,11 +11,10 @@ struct AddTaskView: View {
     
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: TaskViewModel
-    @State private var title = ""
+    @State private var draft = TaskDraft(title: "", shortDescription: "")
     @FocusState private var isTitleFocused: Bool
-    @State private var description = ""
     @State private var showDiscardAlert = false
-    
+    @Binding var showRepeatingTasks: Bool
     @State private var isReminderEnabled = false
     
     var body: some View {
@@ -24,18 +23,18 @@ struct AddTaskView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     
                     TaskOptionGroup {
-                        TextField("Назва задачі", text: $title, axis: .vertical)
+                        TextField("Назва задачі", text: $draft.title, axis: .vertical)
                             .focused($isTitleFocused)
                             .font(.title3.bold())
                             .padding()
                         Divider()
-                        TextField("Опис", text: $description, axis: .vertical)
+                        TextField("Опис", text: $draft.shortDescription, axis: .vertical)
                             .foregroundStyle(.secondary)
                             .padding()
                     }
                     
                     VoiceMessageCell()
-                    DateTimeOptionsView()
+                    DateTimeOptionsView(draft: $draft)
                     ResourceOptionsView()
                     AdditionalOptionsView()
                 }
@@ -50,7 +49,7 @@ struct AddTaskView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        if title.isEmpty {
+                        if draft.title.isEmpty {
                             dismiss()
                         } else {
                             showDiscardAlert = true
@@ -67,17 +66,18 @@ struct AddTaskView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        let task = Task(id: UUID(), title: title, isCompleted: false, subTasks: [], media: [])
+                        let task = draft.makeTaskFromDraft()
                         viewModel.addTask(task)
                         dismiss()
+                        showRepeatingTasks = draft.repeatRule != nil
                     }
                     label: {
                         Image(systemName: "checkmark")
-                            .foregroundStyle(title.isEmpty ? .secondary : appBackgroundColor)
+                            .foregroundStyle(draft.title.isEmpty ? .secondary : appBackgroundColor)
                     }
                     .buttonStyle(.glassProminent)
-                    .tint(title.isEmpty ? .white : appAccentColor)
-                    .disabled(title.isEmpty)
+                    .tint(draft.title.isEmpty ? .white : appAccentColor)
+                    .disabled(draft.title.isEmpty)
                 }
             }
         }

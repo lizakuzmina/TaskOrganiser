@@ -15,7 +15,7 @@ final class Coordinator {
     let store: TaskStore
     let service: TaskService
     let viewModel: TaskViewModel
-    let taskListView: TaskListView
+    let taskListContainerView: TaskListContainerView
 
     init() {
         container = try! ModelContainer(
@@ -29,6 +29,6 @@ final class Coordinator {
         store = TaskStore(modelContext: context)
         service = TaskService(store: store)
         viewModel = TaskViewModel(service: service)
-        taskListView = TaskListView(viewModel: viewModel)
+        taskListContainerView = TaskListContainerView(viewModel: viewModel)
     }
 }

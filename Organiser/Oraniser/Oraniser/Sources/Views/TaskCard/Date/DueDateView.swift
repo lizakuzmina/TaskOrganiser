@@ -13,8 +13,17 @@ struct DueDateView: View {
     private var formattedDate: String? {
         guard let dueDate else { return nil }
 
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: dueDate)
+        let minute = calendar.component(.minute, from: dueDate)
+
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy, HH:mm"
+
+        if hour == 0 && minute == 0 {
+            formatter.dateFormat = "dd.MM.yyyy"
+        } else {
+            formatter.dateFormat = "dd.MM.yyyy, HH:mm"
+        }
 
         return formatter.string(from: dueDate)
     }
